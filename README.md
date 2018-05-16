@@ -1,4 +1,5 @@
-#Backup
+# Backup
+ 
 
 ## Beschreibung
 Script zum Sichern von Dateistrukturen in Zielordner mittels Robocopy. Es werden unterschiedliche Modis bereit-
@@ -12,10 +13,8 @@ Parameter bestimmt werden.
 
 
 /M     Modus des Backups [Std.: full]
-
-*full  vollstaendige Spiegelung
-
-*diff  differentielle Sicherung (alle seit der letzten vollen Sicherung veraenderten Dateien werden gespiegelt)
+* full  vollstaendige Spiegelung
+* diff  differentielle Sicherung (alle seit der letzten vollen Sicherung veraenderten Dateien werden gespiegelt)
         
 /N     Name des Backups (Nur in Kombination mit /M:full!) [Std.: entspricht dem Modus]  	
 
