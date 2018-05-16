@@ -1,4 +1,3 @@
-
 # Backup
  
 
@@ -28,7 +27,7 @@ Name des Jobs - wird dieses Argument gesetzt, dann wird der Job - falls vorhande
 Attribute werden korrigiert (versteckt und system wird entfernt)
 
 /U     
-Es werden keine Sicherheitsrückfragen 
+Es werden keine Sicherheitsrückfragen gestellt
 
 /V     
 ausführliche Ausgaben
