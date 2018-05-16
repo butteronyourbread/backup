@@ -1,21 +1,21 @@
-# Beschreibung
+#Backup
+
+## Beschreibung
 Script zum Sichern von Dateistrukturen in Zielordner mittels Robocopy. Es werden unterschiedliche Modis bereit-
 gestellt, um volle oder differentielle Sicherungen zu erstellen.
 Alle Quellen und Ziele werden aus den Config-Dateien gezogen. Ausser im manuellen Modus. Hier kann das Ziel per
 Parameter bestimmt werden.
 
-# Syntax
+## Syntax
 
     BACKUP [/M[[:]Modus]] [/N[[:]Backupname]] [/J[:]Job]] [/A] [/U] [/V] [Quelllaufwerk:[Quellpfad]] [Ziellaufwerk:[Zielpfad]]
 
 
 /M     Modus des Backups [Std.: full]
 
-Modis  
+*full  vollstaendige Spiegelung
 
-    full  vollstaendige Spiegelung
-   
-    diff  differentielle Sicherung (alle seit der letzten vollen Sicherung veraenderten Dateien werden gespiegelt)
+*diff  differentielle Sicherung (alle seit der letzten vollen Sicherung veraenderten Dateien werden gespiegelt)
         
 /N     Name des Backups (Nur in Kombination mit /M:full!) [Std.: entspricht dem Modus]  	
 
@@ -27,7 +27,7 @@ Modis
 
 /V     ausführliche Ausgaben
 
-# Beispiele
+## Beispiele
 Bsp. fuer eine manuelle Sicherung auf eine Festplatte:
 
     BACKUP E:\Dateien F:
