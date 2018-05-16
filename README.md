@@ -1,3 +1,4 @@
+
 # Backup
  
 
@@ -12,19 +13,25 @@ Parameter bestimmt werden.
     BACKUP [/M[[:]Modus]] [/N[[:]Backupname]] [/J[:]Job]] [/A] [/U] [/V] [Quelllaufwerk:[Quellpfad]] [Ziellaufwerk:[Zielpfad]]
 
 
-/M     Modus des Backups [Std.: full]
+/M     
+Modus des Backups [Std.: full]
 * full  vollstaendige Spiegelung
 * diff  differentielle Sicherung (alle seit der letzten vollen Sicherung veraenderten Dateien werden gespiegelt)
         
-/N     Name des Backups (Nur in Kombination mit /M:full!) [Std.: entspricht dem Modus]  	
+/N     
+Name des Backups (Nur in Kombination mit /M:full!) [Std.: entspricht dem Modus]  	
 
-/J     Name des Jobs - wird dieses Argument gesetzt, dann wird der Job - falls vorhanden - aus der Jobkonfi guration geladen. Manuelle Pfadangaben sind dann ungueltig.
+/J     
+Name des Jobs - wird dieses Argument gesetzt, dann wird der Job - falls vorhanden - aus der Jobkonfi guration geladen. Manuelle Pfadangaben sind dann ungueltig.
 
-/A     Attribute werden korrigiert (versteckt und system wird entfernt)
+/A     
+Attribute werden korrigiert (versteckt und system wird entfernt)
 
-/U     Es werden keine Sicherheitsrückfragen 
+/U     
+Es werden keine Sicherheitsrückfragen 
 
-/V     ausführliche Ausgaben
+/V     
+ausführliche Ausgaben
 
 ## Beispiele
 Bsp. fuer eine manuelle Sicherung auf eine Festplatte:
