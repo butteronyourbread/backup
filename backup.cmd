@@ -4,18 +4,21 @@ Setlocal EnableDelayedExpansion
 
 :: setting constants ::
 set VERSION=2
-set BUILD=0
+set BUILD=1
 set AUTHOR=ButterOnYourBread
+
 set ARG_MODE=M
 set ARG_BACKUPNAME=N
 set ARG_ATTRUBUTESKIP=A
 set ARG_UNATTENDED=U
 set ARG_VERBOSE=V
 set ARG_JOB=J
+
 set MODE_DIFF=diff
 set MODE_FULL=full
-set PATH_CONFIG=%~dp0%config
+
 set PATH_TMP=%~dp0%tmp
+set PATH_CONFIG=%~dp0%config
 set PATH_JOBS=%PATH_CONFIG%\jobs
 set PATH_DESTINATIONS=%PATH_CONFIG%\destinations
 set PATH_SOURCES=%PATH_CONFIG%\sources
@@ -24,18 +27,19 @@ set PATH_EXCLUDES=%PATH_CONFIG%\excludes
 
 :: variable init :
 set scriptTitle=Volles Backup
+
 set time_f=%time%
 set time_f=%time_f: =0%
 set time_f=%time_f::=%
 set time_f=%time_f:,=%
-set hh=%time_f:~-8,2%
-set mm=%time_f:~-6,2%
-set ss=%time_f:~-4,2%
-set TIMESTAMP_F=%date:~-4%_%date:~3,2%_%date:~0,2%__%hh%%mm%%ss%
+set TIMESTAMP_F=%date:~-4%_%date:~3,2%_%date:~0,2%__%time_f:~-8,2%%time_f:~-6,2%%time_f:~-4,2%
+
 set hosts=%PATH_TMP%\%TIMESTAMP_F%_job
 set destinations=%PATH_TMP%\%TIMESTAMP_F%_destinations
 set sources=%PATH_TMP%\%TIMESTAMP_F%_sources
+
 set errortext=
+
 set mode=%MODE_FULL%
 set job=
 set backupname=%mode%
@@ -44,14 +48,18 @@ set unattended=0
 set verbose=0
 set pathSource=
 set pathDestination=
+
 set maxParam=8
-set switchSourceParsed=0
-set /A countArgs=0
+set pathSourceParsed=0
+
+set /A countParam=0
 set /A countHosts=0
+set /A countBackupRun=0
+
 
 :: parameter & argument parsing ::
 for %%x in (%*) do (
-	set /a countArgs+=1
+	set /a countParam+=1
 	set arg=%%x
 	
 	::parse arguments
@@ -138,9 +146,9 @@ for %%x in (%*) do (
 	
 		:: parse parameters
 		if "%job%"=="" (
-			if !switchSourceParsed!==0 (
+			if !pathSourceParsed!==0 (
 				set pathSource=%%x
-				set switchSourceParsed=1
+				set pathSourceParsed=1
 			) else (
 				set pathDestination=%%x
 			)
@@ -149,11 +157,11 @@ for %%x in (%*) do (
 )
 
 if "%~1"=="/?" goto :usage
-if %countArgs%==0 (
+if %countParam%==0 (
 	set "errortext=erwartete Parameter fehlen"
 	goto :errorParam
 )
-if %countArgs% GTR %maxParam% (
+if %countParam% GTR %maxParam% (
 	set "errortext=nicht erwartete Parameter angegeben"
 	goto :errorParam
 )
@@ -240,9 +248,10 @@ if "%job%"=="" (
 call :header
 
 for /f "eol=; tokens=1,2* usebackq delims=" %%h in (%hosts%) do (
+	set /a countBackupRun+=1
+
 	if not "%job%"=="" (
-		echo Beginne mit Sicherung der Quellen von "%%h"
-	
+		echo Beginne mit Sicherung der Quellen von "%%h":
 		set destinations=%PATH_DESTINATIONS%\%%h
 		set sources=%PATH_SOURCES%\%%h
 	)
@@ -320,8 +329,8 @@ for /f "eol=; tokens=1,2* usebackq delims=" %%h in (%hosts%) do (
 		)
 	)
 	
-	if not "%countHosts%"=="1" (
-		echo.
+	if not "%countHosts%"=="!countBackupRun!" (
+        echo --------------------------------------------------------------------------------
 		echo.
 	)
 )
@@ -361,19 +370,19 @@ if exist %1 (
 
 :header
 cls
-echo ___________________________________
-echo ______            _                
-echo ^| ___ \          ^| ^|               
-echo ^| ^|_/ / __ _  ___^| ^| ___   _ _ __  
-echo ^| ___ \/ _` ^|/ __^| ^|/ / ^| ^| ^| '_ \ 
-echo ^| ^|_/ / (_^| ^| (__^|   ^<^| ^|_^| ^| ^|_) ^|
-echo \____/ \__,_^|\___^|_^|\_\\__,_^| .__/ 
-echo                             ^| ^|    
-echo                             ^|_^|
+echo ________________________________________________________________________________
+echo                        ______            _                
+echo                        ^| ___ \          ^| ^|               
+echo                        ^| ^|_/ / __ _  ___^| ^| ___   _ _ __  
+echo                        ^| ___ \/ _` ^|/ __^| ^|/ / ^| ^| ^| '_ \ 
+echo                        ^| ^|_/ / (_^| ^| (__^|   ^<^| ^|_^| ^| ^|_) ^|
+echo                        \____/ \__,_^|\___^|_^|\_\\__,_^| .__/ 
+echo                                                    ^| ^|    
+echo                                                    ^|_^|
 echo.
-echo                         Version %VERSION%.%BUILD%
-echo               (C) %AUTHOR%
-echo -----------------------------------
+echo                                                                      Version %VERSION%.%BUILD%
+echo                                                            (C) %AUTHOR%
+echo --------------------------------------------------------------------------------
 echo Modus: %scriptTitle%
 if not "%job%"=="" (
 	echo Job:   %job%
@@ -383,7 +392,7 @@ if not "%job%"=="" (
 		)
 	)
 )
-echo ___________________________________
+echo ________________________________________________________________________________
 echo. 
 echo.
 goto :eof
