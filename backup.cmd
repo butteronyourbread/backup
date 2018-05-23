@@ -4,7 +4,7 @@ Setlocal EnableDelayedExpansion
 
 :: setting constants ::
 set VERSION=2
-set BUILD=1
+set BUILD=2
 set AUTHOR=ButterOnYourBread
 
 set ARG_MODE=M
@@ -12,6 +12,7 @@ set ARG_BACKUPNAME=N
 set ARG_ATTRUBUTESKIP=A
 set ARG_UNATTENDED=U
 set ARG_VERBOSE=V
+set ARG_LOG=L
 set ARG_JOB=J
 
 set MODE_DIFF=diff
@@ -48,8 +49,9 @@ set unattended=0
 set verbose=0
 set pathSource=
 set pathDestination=
+set log=0
 
-set maxParam=8
+set maxParam=9
 set pathSourceParsed=0
 
 set /A countParam=0
@@ -97,12 +99,16 @@ for %%x in (%*) do (
 			set verbose=1
 		)
 		
+		if "!arg:~1!"=="%ARG_LOG%" (
+			set log=1
+		)
+		
 		if "!arg:~1,1!"=="%ARG_JOB%" (
 			::parse value of argument
 			if "!arg:~2,1!"==":" (
 				if not "!arg:~3!"=="" (
 					set job=!arg:~3!
-					set maxParam=6
+					set maxParam=7
 					
 					if not exist %PATH_JOBS%\!job! ( 
 						set "errortext=Job nicht gefunden"
@@ -285,7 +291,7 @@ for /f "eol=; tokens=1,2* usebackq delims=" %%h in (%hosts%) do (
 				set destPath=%%d\%%h\%MODE_DIFF%\%TIMESTAMP_F%\
 			)
 			
-			for /f %%p in ("%%s") do (
+			for /f "delims=" %%p in ("%%s") do (
 				if /i 0%%~np==0 (
 					set destPath=!destPath!%%s
 				) else (
@@ -313,7 +319,16 @@ for /f "eol=; tokens=1,2* usebackq delims=" %%h in (%hosts%) do (
 					set copymode=/E /A
 				)
 				
-				robocopy "%%s" "!destPath!" !copymode! /COPY:DAT /DCOPY:DAT /SL /MT:8 /XA:ST /XJ /XJD /XJF /XD !excludes! /R:0 /W:0 /ETA /NC /NDL /NFL /NJH /NJS /NS /NP /Log:"!destPath!.log" >nul
+				if /i %log%==1 (
+					set logparam=/Log:"!destPath!.log"
+				)
+
+				robocopy "%%s" "!destPath!" !copymode! /COPY:DAT /DCOPY:DAT /SL /MT:8 /XA:ST /XJ /XJD /XJF /XD !excludes! /R:0 /W:0 /ETA /NC /NDL /NFL /NJH /NJS /NS /NP !logparam!
+				
+				if /i %log%==1 (
+					echo.
+					echo.
+				)
 				
 				if /i %mode%==%MODE_FULL% (
 					echo     [!time:~0,2!:!time:~3,2!:!time:~6,2!] Setze Archivbit zurueck
