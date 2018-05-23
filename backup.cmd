@@ -305,7 +305,7 @@ for /f "eol=; tokens=1,2* usebackq delims=" %%h in (%hosts%) do (
 				if not "%job%"=="" (
 					if exist %PATH_EXCLUDES%\%%h (
 						for /f "eol=; tokens=1,2* usebackq delims=" %%x in (%PATH_EXCLUDES%\%%h) do ( 
-							set excludes=!excludes!"%%x" 
+							set excludes=!excludes! "%%x" 
 						)
 					)
 				)
