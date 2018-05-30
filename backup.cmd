@@ -320,11 +320,11 @@ for /f "eol=; tokens=1,2* usebackq delims=" %%h in (%hosts%) do (
 				)
 				
 				if /i %log%==1 (
-					set logparam=/Log:"!destPath!.log"
+					robocopy "%%s" "!destPath!" !copymode! /COPY:DAT /DCOPY:DAT /SL /MT:8 /XA:ST /XJ /XJD /XJF /R:0 /W:0 /ETA /NC /NDL /NFL /NJH /NJS /NS /NP /Log:"!destPath!.log" /XD !excludes!
+				) else (
+					robocopy "%%s" "!destPath!" !copymode! /COPY:DAT /DCOPY:DAT /SL /MT:8 /XA:ST /XJ /XJD /XJF /R:0 /W:0 /ETA /NC /NDL /NFL /NJH /NJS /NS /NP /XD !excludes! >nul
 				)
 
-				robocopy "%%s" "!destPath!" !copymode! /COPY:DAT /DCOPY:DAT /SL /MT:8 /XA:ST /XJ /XJD /XJF /R:0 /W:0 /ETA /NC /NDL /NFL /NJH /NJS /NS /NP !logparam! /XD !excludes!
-				
 				if /i %log%==1 (
 					echo.
 					echo.
