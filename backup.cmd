@@ -439,8 +439,9 @@ echo /N     Name des Backups (Nur in Kombination mit /M:full!) [Std.: entspricht
 echo /J     Name des Jobs - wird dieses Argument gesetzt, dann wird der Job - falls vorhanden - aus der Jobkonfi-
 echo        guration geladen. Manuelle Pfadangaben sind dann ungueltig.
 echo /A     Attribute werden korrigiert (versteckt und system wird entfernt)
-echo /U     Es werden keine Sicherheitsrückfragen gestellt
-echo /V     ausführliche Ausgaben
+echo /U     Es werden keine SicherheitsrÃ¼ckfragen gestellt
+echo /V     AusfÃ¼hrliche Ausgaben
+echo /L     Fehlerlogging in Ausgabedatei des Sicherungsordners
 echo.
 echo.
 echo Bsp. fuer eine manuelle Sicherung auf eine Festplatte:	
