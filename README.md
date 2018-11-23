@@ -34,7 +34,7 @@ Es werden keine Sicherheitsrückfragen gestellt
 /V     
 Ausführliche Ausgaben
 
-/L
+/L     
 Fehlerlogging in Ausgabedatei des Sicherungsordners
 
 ## Beispiele
