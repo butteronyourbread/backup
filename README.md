@@ -1,3 +1,5 @@
+
+
 # Backup
  
 
@@ -30,7 +32,10 @@ Attribute werden korrigiert (versteckt und system wird entfernt)
 Es werden keine Sicherheitsrückfragen gestellt
 
 /V     
-ausführliche Ausgaben
+Ausführliche Ausgaben
+
+/L
+Fehlerlogging in Ausgabedatei des Sicherungsordners
 
 ## Beispiele
 Bsp. fuer eine manuelle Sicherung auf eine Festplatte:
@@ -39,7 +44,7 @@ Bsp. fuer eine manuelle Sicherung auf eine Festplatte:
      
 Bsp. fuer ein volles Backup anhand eines vorkonfigurierten Jobs: 
 
-    BACKUP /J:monatssicherung /A /U
+    BACKUP /J:monatssicherung /A /U /L
      
 Bsp. fuer ein differentielles Backup: 
 
