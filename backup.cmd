@@ -287,18 +287,31 @@ for /f "eol=; tokens=1,2* usebackq delims=" %%h in (%hosts%) do (
 	for /f "eol=; tokens=1,2* usebackq delims=" %%s in (!sources!) do ( 
 		for /f "eol=; tokens=1,2* usebackq delims=" %%d in (!destinations!) do ( 
 			set destPath=%%d\%%h\%backupname%\
+		
 			if /i %mode%==%MODE_DIFF% (
 				set destPath=%%d\%%h\%MODE_DIFF%\%TIMESTAMP_F%\
 			)
 			
 			for /f "delims=" %%p in ("%%s") do (
+				set srcext=%%p
+				
 				if /i 0%%~np==0 (
 					set destPath=!destPath!%%s
 				) else (
 					set destPath=!destPath!%%~np
 				)
 				
+				if "!srcext:~,2!"=="\\" (
+					set destPath=!destPath:\\=!
+				)
+				
 				set destPath=!destPath::\.=!
+				set destPath=!destPath:.=_!
+
+				if "!destPath:~-1!"=="\" (
+					set destPath=!destPath:~0,-1!
+				)
+				
 				echo     [!time:~0,2!:!time:~3,2!:!time:~6,2!] Kopiere %%s nach !destPath!
 				
 				set excludes=
@@ -319,10 +332,15 @@ for /f "eol=; tokens=1,2* usebackq delims=" %%h in (%hosts%) do (
 					set copymode=/E /A
 				)
 				
+				set src=%%s
+				if "!src:~-1!"=="\" (
+					set src=!src:~0,-1!
+				)
+				
 				if /i %log%==1 (
-					robocopy "%%s" "!destPath!" !copymode! /COPY:DAT /DCOPY:DAT /SL /MT:8 /XA:ST /XJ /XJD /XJF /R:0 /W:0 /ETA /NC /NDL /NFL /NJH /NJS /NS /NP /Log:"!destPath!.log" /XD !excludes!
+					robocopy "!src!" "!destPath!" !copymode! /COPY:DAT /DCOPY:DAT /SL /MT:8 /XA:ST /XJ /XJD /XJF /R:0 /W:0 /ETA /NC /NDL /NFL /NJH /NJS /NS /NP /Log:"!destPath!.log" /XD !excludes!
 				) else (
-					robocopy "%%s" "!destPath!" !copymode! /COPY:DAT /DCOPY:DAT /SL /MT:8 /XA:ST /XJ /XJD /XJF /R:0 /W:0 /ETA /NC /NDL /NFL /NJH /NJS /NS /NP /XD !excludes! >nul
+					robocopy "!src!" "!destPath!" !copymode! /COPY:DAT /DCOPY:DAT /SL /MT:8 /XA:ST /XJ /XJD /XJF /R:0 /W:0 /ETA /NC /NDL /NFL /NJH /NJS /NS /NP /XD !excludes! >nul
 				)
 
 				if /i %log%==1 (
@@ -439,15 +457,15 @@ echo /N     Name des Backups (Nur in Kombination mit /M:full!) [Std.: entspricht
 echo /J     Name des Jobs - wird dieses Argument gesetzt, dann wird der Job - falls vorhanden - aus der Jobkonfi-
 echo        guration geladen. Manuelle Pfadangaben sind dann ungueltig.
 echo /A     Attribute werden korrigiert (versteckt und system wird entfernt)
-echo /U     Es werden keine SicherheitsrÃ¼ckfragen gestellt
-echo /V     AusfÃ¼hrliche Ausgaben
-echo /L     Fehlerlogging in Ausgabedatei des Sicherungsordners
+echo /U     Es werden keine Sicherheitsrückfragen gestellt
+echo /V     ausführliche Ausgaben
+echo /L     Fehlerlogging in Logdatei des Backupordners
 echo.
 echo.
 echo Bsp. fuer eine manuelle Sicherung auf eine Festplatte:	
 echo     BACKUP E:\Dateien F:
 echo Bsp. fuer ein volles Backup anhand eines vorkonfigurierten Jobs: 
-echo     BACKUP /J:monatssicherung /A /U
+echo     BACKUP /J:monatssicherung /A /U /L
 echo Bsp. fuer ein differentielles Backup: 
 echo     BACKUP /M:diff /J:monatssicherung /A
 echo.
