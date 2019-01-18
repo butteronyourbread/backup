@@ -285,35 +285,30 @@ for /f "eol=; tokens=1,2* usebackq delims=" %%h in (%hosts%) do (
 	)  
 	
 	for /f "eol=; tokens=1,2* usebackq delims=" %%s in (!sources!) do ( 
-		for /f "eol=; tokens=1,2* usebackq delims=" %%d in (!destinations!) do ( 
-			set destPath=%%d\%%h\%backupname%\
+		for /f "eol=; tokens=1,2* usebackq delims=" %%d in (!destinations!) do (
+			set destination=%%d
+			
+			if "!destination:~-1!"=="\" (
+				set destination=!destination:~0,-1!
+			)
+
+			set destPath=!destination!\%%h\%backupname%\
 		
 			if /i %mode%==%MODE_DIFF% (
-				set destPath=%%d\%%h\%MODE_DIFF%\%TIMESTAMP_F%\
+				set destPath=!destination!\%%h\%MODE_DIFF%\%TIMESTAMP_F%\
 			)
 			
 			for /f "delims=" %%p in ("%%s") do (
-				set srcext=%%p
-				
 				if /i 0%%~np==0 (
 					set destPath=!destPath!%%s
 				) else (
 					set destPath=!destPath!%%~np
 				)
 				
-				if "!srcext:~,2!"=="\\" (
-					set destPath=!destPath:\\=!
-				)
-				
 				set destPath=!destPath::\.=!
-				set destPath=!destPath:.=_!
-
-				if "!destPath:~-1!"=="\" (
-					set destPath=!destPath:~0,-1!
-				)
 				
 				echo     [!time:~0,2!:!time:~3,2!:!time:~6,2!] Kopiere %%s nach !destPath!
-				
+
 				set excludes=
 				if not "%job%"=="" (
 					if exist %PATH_EXCLUDES%\%%h (
@@ -338,9 +333,9 @@ for /f "eol=; tokens=1,2* usebackq delims=" %%h in (%hosts%) do (
 				)
 				
 				if /i %log%==1 (
-					robocopy "!src!" "!destPath!" !copymode! /COPY:DAT /DCOPY:DAT /SL /MT:8 /XA:ST /XJ /XJD /XJF /R:0 /W:0 /ETA /NC /NDL /NFL /NJH /NJS /NS /NP /Log:"!destPath!.log" /XD !excludes!
+					robocopy "!src!" "!destPath!" !copymode! /COPY:DAT /DCOPY:DT /SL /MT:8 /XA:ST /XJ /XJD /XJF /R:0 /W:0 /ETA /NC /NDL /NFL /NJH /NJS /NS /NP /Log:"!destPath!.log" /XD !excludes!
 				) else (
-					robocopy "!src!" "!destPath!" !copymode! /COPY:DAT /DCOPY:DAT /SL /MT:8 /XA:ST /XJ /XJD /XJF /R:0 /W:0 /ETA /NC /NDL /NFL /NJH /NJS /NS /NP /XD !excludes! >nul
+					robocopy "!src!" "!destPath!" !copymode! /COPY:DAT /DCOPY:DT /SL /MT:8 /XA:ST /XJ /XJD /XJF /R:0 /W:0 /ETA /NC /NDL /NFL /NJH /NJS /NS /NP /XD !excludes! >nul
 				)
 
 				if /i %log%==1 (
