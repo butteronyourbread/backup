@@ -18,8 +18,9 @@ set ARG_JOB=J
 set MODE_DIFF=diff
 set MODE_FULL=full
 
-set PATH_TMP=%~dp0%tmp
+set PATH_TMP="%~dp0%tmp"
 set PATH_CONFIG=%~dp0%config
+
 set PATH_JOBS=%PATH_CONFIG%\jobs
 set PATH_DESTINATIONS=%PATH_CONFIG%\destinations
 set PATH_SOURCES=%PATH_CONFIG%\sources
@@ -198,7 +199,7 @@ if exist %PATH_TMP% (
 )
 
 if not "%job%"=="" (
-	set hosts=%PATH_JOBS%\%job%
+	set hosts="%PATH_JOBS%\%job%"
 ) else (
 	md %PATH_TMP% >nul
 	
@@ -235,7 +236,7 @@ for /f "eol=; tokens=1,2* usebackq delims=" %%h in (%hosts%) do (
 	set /a countHosts+=1
 
 	if not "%job%"=="" (
-		set destinations=%PATH_DESTINATIONS%\%%h
+		set destinations="%PATH_DESTINATIONS%\%%h"
 	)
 	
 	for /f "eol=; tokens=1,2* usebackq delims=" %%t in (!destinations!) do ( 
@@ -258,8 +259,8 @@ for /f "eol=; tokens=1,2* usebackq delims=" %%h in (%hosts%) do (
 
 	if not "%job%"=="" (
 		echo Beginne mit Sicherung der Quellen von "%%h":
-		set destinations=%PATH_DESTINATIONS%\%%h
-		set sources=%PATH_SOURCES%\%%h
+		set destinations="%PATH_DESTINATIONS%\%%h"
+		set sources="%PATH_SOURCES%\%%h"
 	)
 	
 	if /i %mode%==%MODE_FULL% (
@@ -311,8 +312,8 @@ for /f "eol=; tokens=1,2* usebackq delims=" %%h in (%hosts%) do (
 
 				set excludes=
 				if not "%job%"=="" (
-					if exist %PATH_EXCLUDES%\%%h (
-						for /f "eol=; tokens=1,2* usebackq delims=" %%x in (%PATH_EXCLUDES%\%%h) do ( 
+					if exist "%PATH_EXCLUDES%\%%h" (
+						for /f "eol=; tokens=1,2* usebackq delims=" %%x in ("%PATH_EXCLUDES%\%%h") do ( 
 							set excludes=!excludes! "%%x" 
 						)
 					)
@@ -452,8 +453,8 @@ echo /N     Name des Backups (Nur in Kombination mit /M:full!) [Std.: entspricht
 echo /J     Name des Jobs - wird dieses Argument gesetzt, dann wird der Job - falls vorhanden - aus der Jobkonfi-
 echo        guration geladen. Manuelle Pfadangaben sind dann ungueltig.
 echo /A     Attribute werden korrigiert (versteckt und system wird entfernt)
-echo /U     Es werden keine Sicherheitsrückfragen gestellt
-echo /V     ausführliche Ausgaben
+echo /U     Es werden keine Sicherheitsrueckfragen gestellt
+echo /V     ausfuehrliche Ausgaben
 echo /L     Fehlerlogging in Logdatei des Backupordners
 echo.
 echo.
