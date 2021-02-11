@@ -4,7 +4,7 @@ Setlocal EnableDelayedExpansion
 
 :: setting constants ::
 set VERSION=2
-set BUILD=2
+set BUILD=3
 set AUTHOR=ButterOnYourBread
 
 set ARG_MODE=M
